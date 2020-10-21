@@ -1,5 +1,5 @@
-import { Queue } from './queue'
-import type { IQueue } from './types'
+import { Queue } from 'model'
+import type { IQueue } from 'model/interfaces'
 
 class MyObj<T> {
   public constructor(

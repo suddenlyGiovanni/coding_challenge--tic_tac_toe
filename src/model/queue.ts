@@ -1,4 +1,4 @@
-import { IQueue } from 'types'
+import type { IQueue } from 'model/interfaces'
 
 export class Queue<T> implements IQueue<T> {
   private items: T[]

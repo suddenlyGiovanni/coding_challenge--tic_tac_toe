@@ -3,7 +3,7 @@ import { CellID } from 'model/cell'
 import type {
   IBoard,
   IMatch,
-  IMatchStatus,
+  IMatchState,
   IObserver,
   IPlayer1,
   IPlayer2,
@@ -13,10 +13,10 @@ import type {
 import { Player1, Player2, PlayerID } from 'model/player'
 import { Turn } from 'model/turn'
 
-export class Match implements IMatch, ISubject<IMatchStatus> {
+export class Match implements IMatch, ISubject<IMatchState> {
   private static instance: Match
 
-  private observers: IObserver<IMatchStatus>[]
+  private observers: IObserver<IMatchState>[]
   public readonly turn: ITurn
 
   public readonly board: IBoard
@@ -36,15 +36,15 @@ export class Match implements IMatch, ISubject<IMatchStatus> {
 
   public notifyObservers(): void {
     for (const observer of this.observers) {
-      observer.update({}) // TODO: add correct IMatchStatus data
+      observer.update(this.board.getBoardState()) // TODO: add correct IMatchStatus data
     }
   }
 
-  public registerObserver(observer: IObserver<IMatchStatus>): void {
+  public registerObserver(observer: IObserver<IMatchState>): void {
     this.observers.push(observer)
   }
 
-  public removeObserver(observer: IObserver<IMatchStatus>): void {
+  public removeObserver(observer: IObserver<IMatchState>): void {
     const index = this.observers.indexOf(observer)
     this.observers.splice(index, 1)
   }

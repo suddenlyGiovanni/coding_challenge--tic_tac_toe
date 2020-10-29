@@ -1,4 +1,4 @@
-export type { IMatch, IMatchStatus } from './match.interface'
+export type { IMatch, IMatchState } from './match.interface'
 export type { IQueue } from './queue.interface'
 export type { ITurn, ITurnNumber } from './turn.interface'
 export type { ICell, ICellState, ICellID } from './cell.interface'

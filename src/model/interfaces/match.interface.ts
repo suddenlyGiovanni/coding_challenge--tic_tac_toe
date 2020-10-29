@@ -6,8 +6,9 @@ import type {
   IBoard,
   IPlayerID,
 } from 'model/interfaces'
+import { IBoardState } from 'model/interfaces/board.interface'
 
-export interface IMatchStatus {}
+export type IMatchState = IBoardState // TODO: convert it to an interface and add all the necessary fields
 
 /**
  * Creates an instance of a Match, two players and keeps track of whose turn it is.

@@ -79,7 +79,7 @@ rules:
 
   react/function-component-definition:
     - 1
-    - namedComponents: function-declaration
+    - namedComponents: arrow-function
       unnamedComponents: arrow-function
 
   react/jsx-max-depth:
@@ -94,6 +94,10 @@ rules:
     - 2
     - props: never
       children: always
+
+  react/jsx-props-no-spreading:
+    - 1
+    - html: ignore
 
 overrides:
   - files:

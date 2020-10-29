@@ -8,6 +8,8 @@ export enum BoardState {
   draw = 3,
 }
 
+const METHOD_NOT_IMPLEMENTED = 'Method not implemented.'
+
 /**
  * The board can be model as a Graph made of vertices (cell) and edges (sounding reachable cells).
  * In this instance I have decide to represent it two data structures:
@@ -28,8 +30,10 @@ export class Board implements IBoard {
 
   private cells: Map<CellID, CellState>
 
+  // @ts-expect-error value is never read
   private readonly adjacencyLists: ReadonlyMap<CellID, ReadonlyArray<CellID>>
 
+  // @ts-expect-error value is never read
   private readonly winLookupTable: ReadonlyMap<
     CellID,
     readonly [CellID, CellID, CellID][]
@@ -42,19 +46,19 @@ export class Board implements IBoard {
   }
 
   public setCellState(cellID: CellID): CellState | undefined {
-    throw new Error('Method not implemented.')
+    throw new Error(METHOD_NOT_IMPLEMENTED)
   }
 
   public getCellState(cellID: CellID): CellState {
-    throw new Error('Method not implemented.')
+    throw new Error(METHOD_NOT_IMPLEMENTED)
   }
 
   public isCellEmpty(cellID: CellID): boolean {
-    throw new Error('Method not implemented.')
+    throw new Error(METHOD_NOT_IMPLEMENTED)
   }
 
   public getBoardState(): IBoardState {
-    throw new Error('Method not implemented.')
+    throw new Error(METHOD_NOT_IMPLEMENTED)
   }
 
   public reset(): void {

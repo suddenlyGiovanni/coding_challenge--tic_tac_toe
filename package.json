@@ -1,6 +1,7 @@
 {
   "name": "boilerplate--ts_project_starter-react",
   "version": "1.0.8",
+  "private": true,
   "description": "My highly opinionated starting point for a CRA TypeScript project",
   "repository": {
     "type": "git",
@@ -12,44 +13,51 @@
     "url": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter-react/issues"
   },
   "dependencies": {
-    "react": "17.0.0",
-    "react-dom": "17.0.0"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
-    "@testing-library/jest-dom": "5.11.4",
-    "@testing-library/react": "11.1.0",
+    "@testing-library/jest-dom": "5.11.5",
     "@testing-library/react-hooks": "3.4.2",
-    "@testing-library/user-event": "12.1.9",
+    "@testing-library/react": "11.1.0",
+    "@testing-library/user-event": "12.1.10",
     "@types/jest": "26.0.15",
-    "@types/node": "14.14.0",
-    "@types/react": "16.9.53",
-    "@types/react-dom": "16.9.8",
+    "@types/node": "14.14.6",
+    "@types/react-dom": "16.9.9",
+    "@types/react": "16.9.55",
     "@types/testing-library__jest-dom": "5.9.5",
-    "@typescript-eslint/eslint-plugin": "4.5.0",
-    "@typescript-eslint/parser": "4.5.0",
+    "@typescript-eslint/eslint-plugin": "4.6.0",
+    "@typescript-eslint/parser": "4.6.0",
     "babel-eslint": "10.1.0",
     "commitizen": "4.2.2",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "7.11.0",
-    "eslint-config-prettier": "6.14.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-config-react-app": "6.0.0",
     "eslint-config-react": "1.1.7",
-    "eslint-config-react-app": "5.2.1",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jest": "24.1.0",
-    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-prettier": "3.1.4",
-    "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-hooks": "4.2.0",
+    "eslint-plugin-react": "7.21.5",
     "eslint-plugin-sonarjs": "0.5.0",
+    "eslint": "7.12.1",
     "husky": "4.3.0",
-    "lint-staged": "10.4.2",
+    "lint-staged": "10.5.0",
     "prettier": "2.1.2",
-    "react-scripts": "3.4.4",
+    "react-scripts": "4.0.0",
     "standard-version": "9.0.0",
-    "typescript": "4.0.3"
+    "stylelint-config-prettier": "8.0.2",
+    "stylelint-config-rational-order": "0.1.2",
+    "stylelint-config-recommended": "3.0.0",
+    "stylelint-config-styled-components": "0.1.1",
+    "stylelint-order": "4.1.0",
+    "stylelint": "13.7.2",
+    "typescript": "4.0.5",
+    "web-vitals": "^0.2.4"
   },
   "scripts": {
     "cz": "git-cz",
@@ -96,5 +104,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "volta": {
+    "node": "15.0.1",
+    "yarn": "1.22.10"
   }
 }

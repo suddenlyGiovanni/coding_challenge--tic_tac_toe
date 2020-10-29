@@ -1,0 +1,104 @@
+.cell {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cell-size);
+  height: var(--cell-size);
+
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+/*
+  --CELL BORDER--
+  set the outer border correctly depending on the cell position within the board grid
+*/
+
+.cell:first-child,
+.cell:nth-child(2),
+.cell:nth-child(3) {
+  border-top: none;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-child(3n + 3) {
+  border-right: none;
+}
+
+.cell:last-child,
+.cell:nth-child(8),
+.cell:nth-child(7) {
+  border-bottom: none;
+}
+
+/* --CROSS & CIRCLE-- */
+
+.cell.cross::before,
+.cell.cross::after,
+.cell.circle::before {
+  background-color: black;
+}
+
+/* --CROSS & CIRCLE: EMPTY ON HOVER-- */
+.nextCross.cell:not(.cross):not(.circle):hover::before,
+.nextCross.cell:not(.cross):not(.circle):hover::after,
+.nextCircle.cell:not(.cross):not(.circle):hover::before {
+  background-color: lightgrey;
+}
+
+/* --CROSS & CIRCLE: NOT EMPTY-- */
+.cell.cross,
+.cell.circle {
+  cursor: not-allowed;
+}
+
+/*  --CROSS-- */
+.cell.cross::before,
+.cell.cross::after,
+.nextCross.cell:not(.cross):not(.circle):hover::before,
+.nextCross.cell:not(.cross):not(.circle):hover::after {
+  position: absolute;
+
+  width: calc(var(--mark-size) * 0.15);
+  height: var(--mark-size);
+
+  content: '';
+}
+
+.cell.cross::before,
+.nextCross.cell:not(.cross):not(.circle):hover::before {
+  transform: rotate(45deg);
+}
+
+.cell.cross::after,
+.nextCross.cell:not(.cross):not(.circle):hover::after {
+  transform: rotate(-45deg);
+}
+
+/* --CIRCLE-- */
+.cell.circle::before,
+.cell.circle::after,
+.nextCircle.cell:not(.cross):not(.circle):hover::before,
+.nextCircle.cell:not(.cross):not(.circle):hover::after {
+  position: absolute;
+
+  width: var(--mark-size);
+  height: var(--mark-size);
+
+  border-radius: 50%;
+
+  content: '';
+}
+
+.cell.circle::after,
+.nextCircle.cell:not(.cross):not(.circle):hover::after {
+  width: calc(var(--mark-size) * 0.7);
+  height: calc(var(--mark-size) * 0.7);
+
+  background-color: white;
+}

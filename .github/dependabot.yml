@@ -1,14 +1,14 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: weekly
-    time: "04:00"
-    timezone: Europe/Berlin
-  open-pull-requests-limit: 10
-  target-branch: dependancies
-  reviewers:
-  - suddenlyGiovanni
-  labels:
-  - dependencies
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      time: '04:00'
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 10
+    target-branch: dependencies
+    reviewers:
+      - suddenlyGiovanni
+    labels:
+      - dependencies

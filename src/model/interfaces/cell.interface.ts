@@ -12,8 +12,8 @@ export type ICellID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
  * @export
  * @interface ICell
  */
-export interface ICell {
-  readonly id: ICellID
+export interface ICell<ID extends ICellID> {
+  readonly id: ID
 
   /**
    * reset the cell to it's original status `Empty`
@@ -22,7 +22,7 @@ export interface ICell {
   clear(): void
 
   /**
-   * sets the status of the cell to one of the possible values `ICellState`
+   * sets the state of the cell to one of the possible values `ICellState`
    * @param {ICellState} state
    * @memberof ICell
    */

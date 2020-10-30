@@ -1,4 +1,4 @@
-module.exports = function(wallaby) {
+module.exports = function (wallaby) {
   var path = require('path')
   process.env.BABEL_ENV = 'test'
   process.env.NODE_ENV = 'test'
@@ -21,8 +21,9 @@ module.exports = function(wallaby) {
     ],
     filesWithNoCoverageCalculated: [
       'src/serviceWorker.ts',
+      'src/reportWebVitals.ts',
       'src/index.tsx',
-      'src/store/*',
+      'src/model/interfaces/**.*ts',
     ],
 
     tests: ['src/**/*.test.ts?(x)', 'src/**/*.spec.ts?(x)'],
@@ -33,7 +34,7 @@ module.exports = function(wallaby) {
     },
 
     preprocessors: {
-      '**/*.js?(x)': file =>
+      '**/*.js?(x)': (file) =>
         require('@babel/core').transform(file.content, {
           sourceMap: true,
           compact: false,
@@ -42,12 +43,13 @@ module.exports = function(wallaby) {
         }),
     },
 
-    setup: wallaby => {
+    setup: (wallaby) => {
       const jestConfig = require('react-scripts/scripts/utils/createJestConfig')(
-        p => require.resolve('react-scripts/' + p)
+        (p) => require.resolve('react-scripts/' + p)
       )
       Object.keys(jestConfig.transform || {}).forEach(
-        k => ~k.indexOf('^.+\\.(js|jsx') && void delete jestConfig.transform[k]
+        (k) =>
+          ~k.indexOf('^.+\\.(js|jsx') && void delete jestConfig.transform[k]
       )
       delete jestConfig.testEnvironment
       wallaby.testFramework.configure(jestConfig)

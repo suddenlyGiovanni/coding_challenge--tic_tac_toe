@@ -4,9 +4,8 @@ import type {
   IPlayer2,
   ICellID,
   IBoard,
-  IPlayerID,
+  IBoardState,
 } from 'model/interfaces'
-import { IBoardState } from 'model/interfaces/board.interface'
 
 export type IMatchState = IBoardState // TODO: convert it to an interface and add all the necessary fields
 
@@ -31,10 +30,10 @@ export interface IMatch {
   reset(): void
 
   /**
-   * handle a player's move
+   * handle current turn player's move
    * @param {Players} player
    * @param {CellsIds} cellID
    * @memberof IMatch
    */
-  move(player: IPlayerID, cellID: ICellID): void
+  move(cellID: ICellID): void
 }

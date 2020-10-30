@@ -36,4 +36,13 @@ export interface ITurn {
    * @memberof ITurn
    */
   reset(): void
+
+  /**
+   * allows to set the initial state of the Turn class to enable predictable testing
+   * @param {IPlayerID} playerID
+   * @param {ITurnNumber} [turnNumber]
+   * @internal
+   * @memberof ITurn
+   */
+  setInitialState(playerID: IPlayerID, turnNumber?: ITurnNumber): void
 }

@@ -63,4 +63,20 @@ export class Turn implements ITurn {
   private getRandomPlayer(): IPlayer {
     return Turn.getRandomIntInclusive(1, 100) < 50 ? this.player1 : this.player2
   }
+
+  /**
+   * allows to set the initial state of the Turn class to enable predictable testing
+   * @internal
+   */
+  public setInitialState(
+    playerID: IPlayerID,
+    turnNumber: ITurnNumber = 1
+  ): void {
+    this.turnNumber = turnNumber
+    if (this.player1.id === playerID) {
+      this.turn = this.player1
+    } else if (this.player2.id === playerID) {
+      this.turn = this.player2
+    }
+  }
 }

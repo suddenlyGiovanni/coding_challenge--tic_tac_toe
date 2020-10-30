@@ -1,19 +1,20 @@
 import React from 'react'
 import type { VFC } from 'react'
 
-import { BoardState } from 'model/board'
+import { Match } from 'model'
 
 import { Overlay, Board } from 'view'
 
+const match = Match.getInstance()
+
+type ContextInterface = typeof match
+export const MatchCtx = React.createContext<null | ContextInterface>(null)
+
 export const App: VFC = () => {
   return (
-    <>
+    <MatchCtx.Provider value={match}>
       <Board />
-      <Overlay
-        matchState={BoardState.playing}
-        // eslint-disable-next-line react/jsx-no-bind
-        onRestart={(): void => console.log('restart')}
-      />
-    </>
+      <Overlay />
+    </MatchCtx.Provider>
   )
 }

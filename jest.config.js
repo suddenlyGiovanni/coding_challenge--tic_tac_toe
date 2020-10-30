@@ -23,11 +23,12 @@ module.exports = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
     '/src/**/*.{js,jsx,ts,tsx}',
+    '!/src/**/*.interface.ts',
     '!<rootDir>/node_modules/',
     '!/src/serviceWorker.ts',
+    '!/src/reportWebVitals.ts',
     '!/src/test/test-utils.tsx',
     '!/src/index.tsx',
-    '!/src/store',
   ],
 
   // The directory where Jest should output its coverage files
@@ -67,6 +68,7 @@ module.exports = {
   // A set of global variables that need to be available in all test environments
   // globals: {},
 
+  injectGlobals: false,
   // An array of directory names to be searched recursively up from the requiring module's location
   // moduleDirectories: [
   //   "node_modules"

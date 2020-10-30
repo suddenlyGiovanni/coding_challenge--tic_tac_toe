@@ -1,5 +1,4 @@
-import { ICell, ICellID, ICellState } from './interfaces'
-
+import type { ICell, ICellID, ICellState } from 'model/interfaces'
 import { PlayerID } from 'model/player'
 
 export enum CellState {
@@ -20,12 +19,12 @@ export enum CellID {
   eight = 8,
 }
 
-export class Cell implements ICell {
-  public readonly id: ICellID
+export class Cell<ID extends ICellID> implements ICell<ID> {
+  public readonly id: ID
 
   private state: ICellState
 
-  public constructor(cellID: CellID) {
+  public constructor(cellID: ID) {
     this.id = cellID
     this.state = CellState.Empty
   }
@@ -60,7 +59,13 @@ export class Cell implements ICell {
   }
 
   public setState(state: CellState): void {
-    this.state = state
+    if (this.isEmpty()) {
+      this.state = state
+    } else {
+      throw new Error(
+        "Cell state not Empty. Can't set a new state to a non empty cell"
+      )
+    }
   }
 
   public clear(): void {

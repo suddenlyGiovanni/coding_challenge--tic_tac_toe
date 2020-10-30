@@ -1,4 +1,4 @@
-export { Board } from './board'
+export { Board, BoardState } from './board'
 export { Cell, CellState, CellID } from './cell'
 export { Match } from './match'
 export { Player1, Player2, PlayerID } from './player'

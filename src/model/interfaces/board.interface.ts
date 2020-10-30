@@ -1,4 +1,8 @@
-import type { ICellID, ICellState } from 'model/interfaces/cell.interface'
+import type {
+  ICell,
+  ICellID,
+  ICellState,
+} from 'model/interfaces/cell.interface'
 
 type PlayingState = 0
 type PlayerID1WinState = 1
@@ -36,7 +40,7 @@ export interface IBoard {
    * @returns {(undefined | CellStatus)}
    * @memberof IBoard
    */
-  setCellState(cellID: ICellID): undefined | ICellState
+  setCellState(cellID: ICellID, cellState: ICellState): void
 
   /**
    * returns the cell state
@@ -60,4 +64,11 @@ export interface IBoard {
    * @memberof IBoard
    */
   getBoardState(): IBoardState
+
+  /**
+   * returns a read version of the internal board state
+   * @returns {ReadonlyMap<ICellID, ICell<ICellID>>}
+   * @memberof IBoard
+   */
+  getBoard(): ReadonlyMap<ICellID, ICell<ICellID>>
 }

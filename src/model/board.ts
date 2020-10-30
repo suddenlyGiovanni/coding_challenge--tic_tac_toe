@@ -1,5 +1,12 @@
-import { CellID, CellState } from 'model/cell'
-import type { IBoard, ICellID, ICellState, IBoardState } from 'model/interfaces'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { CellID, CellState, Cell } from 'model/cell'
+import type {
+  IBoard,
+  ICellID,
+  ICellState,
+  IBoardState,
+  ICell,
+} from 'model/interfaces'
 
 export enum BoardState {
   playing = 0,
@@ -7,8 +14,6 @@ export enum BoardState {
   playerID2Wins = 2,
   draw = 3,
 }
-
-const METHOD_NOT_IMPLEMENTED = 'Method not implemented.'
 
 /**
  * The board can be model as a Graph made of vertices (cell) and edges (sounding reachable cells).
@@ -28,7 +33,7 @@ const METHOD_NOT_IMPLEMENTED = 'Method not implemented.'
 export class Board implements IBoard {
   private static instance: Board
 
-  private cells: Map<CellID, CellState>
+  private cells: ReadonlyMap<ICellID, ICell<ICellID>>
 
   // @ts-expect-error value is never read
   private readonly adjacencyLists: ReadonlyMap<CellID, ReadonlyArray<CellID>>
@@ -45,27 +50,28 @@ export class Board implements IBoard {
     this.winLookupTable = Board.makeWinLookupTable()
   }
 
-  public setCellState(cellID: CellID): CellState | undefined {
-    throw new Error(METHOD_NOT_IMPLEMENTED)
+  public setCellState(cellID: CellID, cellState: CellState): void {
+    this.cells.get(cellID)!.setState(cellState)
   }
 
-  public getCellState(cellID: CellID): CellState {
-    throw new Error(METHOD_NOT_IMPLEMENTED)
+  public getCellState(cellID: CellID): ICellState {
+    return this.cells.get(cellID)!.getState()
   }
 
   public isCellEmpty(cellID: CellID): boolean {
-    throw new Error(METHOD_NOT_IMPLEMENTED)
+    return this.cells.get(cellID)!.isEmpty()
   }
 
   public getBoardState(): IBoardState {
-    throw new Error(METHOD_NOT_IMPLEMENTED)
+    return BoardState.playing
+    // FIXME:  Error(METHOD_NOT_IMPLEMENTED)
   }
 
   public reset(): void {
-    this.cells = Board.makeCells()
+    this.cells.forEach((cell) => cell.clear())
   }
 
-  public getBoard(): ReadonlyMap<CellID, CellState> {
+  public getBoard(): ReadonlyMap<CellID, ICell<ICellID>> {
     return this.cells
   }
 
@@ -82,17 +88,17 @@ export class Board implements IBoard {
    * @returns {Map<CellID, CellState>}
    * @memberof Board
    */
-  private static makeCells(): Map<ICellID, ICellState> {
-    return new Map<ICellID, ICellState>([
-      [CellID.zero, CellState.Empty],
-      [CellID.one, CellState.Empty],
-      [CellID.two, CellState.Empty],
-      [CellID.three, CellState.Empty],
-      [CellID.four, CellState.Empty],
-      [CellID.five, CellState.Empty],
-      [CellID.six, CellState.Empty],
-      [CellID.seven, CellState.Empty],
-      [CellID.eight, CellState.Empty],
+  private static makeCells(): ReadonlyMap<ICellID, ICell<ICellID>> {
+    return new Map<ICellID, ICell<ICellID>>([
+      [CellID.zero, new Cell(CellID.zero)],
+      [CellID.one, new Cell(CellID.one)],
+      [CellID.two, new Cell(CellID.two)],
+      [CellID.three, new Cell(CellID.three)],
+      [CellID.four, new Cell(CellID.four)],
+      [CellID.five, new Cell(CellID.five)],
+      [CellID.six, new Cell(CellID.six)],
+      [CellID.seven, new Cell(CellID.seven)],
+      [CellID.eight, new Cell(CellID.eight)],
     ])
   }
 

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { PlayerID } from 'model'
 import { CellID, CellState, Cell } from 'model/cell'
 import type {
   IBoard,
@@ -6,6 +7,7 @@ import type {
   ICellState,
   IBoardState,
   ICell,
+  IPlayerID,
 } from 'model/interfaces'
 
 export enum BoardState {
@@ -35,21 +37,20 @@ export class Board implements IBoard {
 
   private board: ReadonlyMap<ICellID, ICell<ICellID>>
 
-  // @ts-expect-error value is never read
-  private readonly adjacencyLists: ReadonlyMap<CellID, ReadonlyArray<CellID>>
+  public static readonly adjacencyLists: ReadonlyMap<
+    CellID,
+    ReadonlyArray<CellID>
+  > = Board.makeAdjacencyLists()
 
-  // @ts-expect-error value is never read
-  private readonly winLookupTable: ReadonlyMap<
+  public static readonly winLookupTable: ReadonlyMap<
     CellID,
     readonly [CellID, CellID, CellID][]
-  >
+  > = Board.makeWinLookupTable()
 
   private constructor(
     board: ReadonlyMap<ICellID, ICell<ICellID>> = Board.makeBoard()
   ) {
     this.board = board
-    this.adjacencyLists = Board.makeAdjacencyLists()
-    this.winLookupTable = Board.makeWinLookupTable()
   }
 
   public setCellState(cellID: CellID, cellState: CellState): void {
@@ -68,18 +69,58 @@ export class Board implements IBoard {
     board: ReadonlyMap<ICellID, ICell<ICellID>>,
     playerID: IPlayerID
   ): boolean {
-    throw new Error('METHOD_NOT_IMPLEMENTED')
+    /**
+     * at this stage, we are only interested in a subset of the board:
+     * the one matching the provided state: `IPlayerID1` | `IPlayerID2`
+     * therefore we can filter out all the rest
+     */
+    const playerBoard = new Map(
+      [...board].filter(([cellID, cell]) => cell.getState() === playerID)
+    )
+
+    const cellIDWinningComb = (
+      cellID: ICellID
+    ): readonly [ICellID, ICellID, ICellID][] =>
+      Board.winLookupTable.get(cellID)!
+
+    const isWinningComb = (winningTuple: [CellID, CellID, CellID]): boolean =>
+      winningTuple.every((winningCellID: CellID): boolean =>
+        playerBoard.has(winningCellID)
+      )
+
+    /**
+     * source the possible winning combinations form the lookup table.
+     * for each of the player's cell on the board, check if at least one of the possible
+     * winning combination is satisfied
+     */
+    const hasWonReducer = (acc: boolean, cellID: ICellID): boolean => {
+      const hasWon = cellIDWinningComb(cellID).some(isWinningComb)
+      return hasWon ? hasWon : acc
+    }
+
+    return [...playerBoard.keys()].reduce(hasWonReducer, false)
   }
 
   private checkAvailableCell(
     board: ReadonlyMap<ICellID, ICell<ICellID>>
   ): boolean {
-    throw new Error('METHOD_NOT_IMPLEMENTED')
+    return [...board.values()].some((cell) => cell.isEmpty())
   }
 
   public getBoardState(): IBoardState {
-    return BoardState.playing
-    // FIXME:  Error(METHOD_NOT_IMPLEMENTED)
+    if (this.checkWin(this.board, PlayerID.Player1)) {
+      return BoardState.playerID1Wins
+    }
+
+    if (this.checkWin(this.board, PlayerID.Player2)) {
+      return BoardState.playerID2Wins
+    }
+
+    if (this.checkAvailableCell(this.board)) {
+      return BoardState.playing
+    }
+
+    return BoardState.draw
   }
 
   public reset(): void {

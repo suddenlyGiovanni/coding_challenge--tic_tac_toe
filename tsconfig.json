@@ -29,8 +29,5 @@
     "pretty": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"],
-  "typeAcquisition": {
-    "enable": true
-  }
+  "include": ["src"]
 }

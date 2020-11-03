@@ -1,7 +1,7 @@
 import { expect, describe, it, beforeEach, afterEach } from '@jest/globals'
 
 /* eslint-disable sonarjs/no-duplicate-string */
-import { CellID, CellState, Board } from 'model'
+import { CellID, CellState, Board, BoardState } from 'model'
 import { PlayerID } from 'model/player'
 
 describe('Board class', () => {
@@ -104,7 +104,115 @@ describe('Board class', () => {
       expect(board.getBoardState).toBeDefined()
     })
 
-    it.todo('should return the board state')
+    it(`should return PlayerID1WinState ${1} in case of victory condition for player1`, () => {
+      expect.hasAssertions()
+      // arrange
+      const board = Board.getInstance()
+      // act
+      board.setCellState(CellID.four, CellState.PlayerID1) // move 1/9
+      board.setCellState(CellID.one, CellState.PlayerID2) // move 2/9
+      board.setCellState(CellID.six, CellState.PlayerID1) // move 3/9
+      board.setCellState(CellID.two, CellState.PlayerID2) // move 4/9
+      board.setCellState(CellID.zero, CellState.PlayerID1) // move 5/9
+      board.setCellState(CellID.eight, CellState.PlayerID2) // move 6/9
+      board.setCellState(CellID.three, CellState.PlayerID1) // move 7/9
+      /**
+       * assert:
+       *
+       * Board structure
+       * +---+---+---+
+       * | X | O | O |
+       * +---+---+---+
+       * | X | X |   |
+       * +---+---+---+
+       * | X |   | O |
+       * +---+---+---+
+       */
+      expect(board.getBoardState()).toBe(BoardState.playerID1Wins)
+    })
+
+    it(`should return PlayerID2WinState ${2} in case of victory condition for player2`, () => {
+      expect.hasAssertions()
+      // arrange
+      const board = Board.getInstance()
+      // act
+      board.setCellState(CellID.four, CellState.PlayerID1) // move 1/9
+      board.setCellState(CellID.six, CellState.PlayerID2) // move 2/9
+      board.setCellState(CellID.zero, CellState.PlayerID1) // move 3/9
+      board.setCellState(CellID.eight, CellState.PlayerID2) // move 4/9
+      board.setCellState(CellID.five, CellState.PlayerID1) // move 5/9
+      board.setCellState(CellID.seven, CellState.PlayerID2) // move 6/9
+      /**
+       * assert:
+       *
+       * Board structure
+       * +---+---+---+
+       * | X |   |   |
+       * +---+---+---+
+       * |   | X | X |
+       * +---+---+---+
+       * | O | O | O |
+       * +---+---+---+
+       */
+      expect(board.getBoardState()).toBe(BoardState.playerID2Wins)
+    })
+
+    it(`should return 'PlayingState' ${0} state if no win condition has been met and there are still some cell 'EMPTY'`, () => {
+      expect.hasAssertions()
+      // arrange
+      const board = Board.getInstance()
+      // act
+      board.setCellState(CellID.zero, CellState.PlayerID1) // move 1/9
+      board.setCellState(CellID.one, CellState.PlayerID2) // move 2/9
+      board.setCellState(CellID.two, CellState.PlayerID1) // move 3/9
+      board.setCellState(CellID.three, CellState.PlayerID2) // move 4/9
+      board.setCellState(CellID.four, CellState.PlayerID1) // move 5/9
+      board.setCellState(CellID.six, CellState.PlayerID2) // move 6/9
+      board.setCellState(CellID.five, CellState.PlayerID1) // move 7/9
+      board.setCellState(CellID.eight, CellState.PlayerID2) // move 8/9
+      /**
+       * assert:
+       *
+       * Board structure
+       * +---+---+---+
+       * | X | O | X |
+       * +---+---+---+
+       * | O | X | X |
+       * +---+---+---+
+       * | O |   | 0 |
+       * +---+---+---+
+       */
+      expect(board.getBoardState()).toBe(BoardState.playing)
+    })
+
+    it(`should return 'DrawState' ${3} if no win condition has been met and all the board is filled`, () => {
+      expect.hasAssertions()
+      // arrange
+      const board = Board.getInstance()
+      // act
+      board.setCellState(CellID.four, CellState.PlayerID1) // move 1/9
+      board.setCellState(CellID.one, CellState.PlayerID2) // move 2/9
+      board.setCellState(CellID.six, CellState.PlayerID1) // move 3/9
+      board.setCellState(CellID.two, CellState.PlayerID2) // move 4/9
+      board.setCellState(CellID.zero, CellState.PlayerID1) // move 5/9
+      board.setCellState(CellID.eight, CellState.PlayerID2) // move 6/9
+      board.setCellState(CellID.five, CellState.PlayerID1) // move 7/9
+      board.setCellState(CellID.three, CellState.PlayerID2) // move 8/9
+      board.setCellState(CellID.seven, CellState.PlayerID1) // move 9/9
+      /**
+       * assert:
+       *
+       * Board structure
+       * +---+---+---+
+       * | X | O | O |
+       * +---+---+---+
+       * | O | X | X |
+       * +---+---+---+
+       * | X | X | O |
+       * +---+---+---+
+       */
+      expect(board.getBoardState()).toBe(BoardState.draw)
+    })
   })
 
   describe('reset', () => {

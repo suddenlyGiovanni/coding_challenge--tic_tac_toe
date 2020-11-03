@@ -2,7 +2,6 @@ import { Board, BoardState } from 'model/board'
 import { CellID } from 'model/cell'
 import {
   IBoard,
-  ICellID,
   IMatch,
   IMatchState,
   IObserver,
@@ -51,36 +50,17 @@ export class Match implements IMatch, ISubject<IMatchState> {
     this.observers.splice(index, 1)
   }
 
-  private isCellEmpty(cellID: ICellID): boolean {
-    if (this.board.isCellEmpty(cellID)) {
-      return true
-    }
-    throw new Error(`Can't apply a move to a non Empty cell: cellID: ${cellID}`)
-  }
-
-  private isValidTurn(): boolean {
-    if (this.turn.number <= 9) {
-      return true
-    }
-    throw new Error(`Invalid turn: ${this.turn.number}`)
-  }
-
   public move(cellID: CellID): void {
-    if (this.isCellEmpty(cellID) && this.isValidTurn()) {
-      // against turn (is the correct player)
-      // validate player move (is said move valid)
-      this.board.setCellState(cellID, this.turn.get())
-      // apply move to the board
-      // check for move status (continue | end)
-      // if continue switch turn
-      // if end verify end case
-      if (
-        this.board.getBoardState() === BoardState.playing &&
-        this.turn.number < 9
-      ) {
+    const MAX_TURN_NUMBER = 9
+    if (MAX_TURN_NUMBER >= this.turn.number) {
+      this.board.setCellState(cellID, this.turn.get()) // this could throw
+      const state = this.board.getBoardState()
+      if (state === BoardState.playing) {
         this.turn.next()
       }
       this.notifyObservers()
+    } else {
+      throw new Error('Turn overflow: A Match can last a maximum of 9 rounds.')
     }
   }
 

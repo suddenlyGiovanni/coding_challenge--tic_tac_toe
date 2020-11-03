@@ -2,8 +2,8 @@
 import { expect, describe, jest, it, afterEach } from '@jest/globals'
 
 import { Match, BoardState, CellID } from 'model'
-import { Cell, CellState } from 'model/cell'
-import type { ICellID, IMatchState, IObserver } from 'model/interfaces'
+import { CellState } from 'model/cell'
+import type { IMatchState, IObserver } from 'model/interfaces'
 
 describe('Match', () => {
   beforeEach(() => {
@@ -94,7 +94,7 @@ describe('Match', () => {
         expect(Match.getInstance().notifyObservers).toBeDefined()
       })
 
-      it.skip('should notify the observers', () => {
+      it('should notify the observers', () => {
         expect.hasAssertions()
         // arrange
         const match = Match.getInstance()
@@ -137,9 +137,53 @@ describe('Match', () => {
       expect(match.board.getCellState(CellID.zero)).toBe(match.player1.id)
     })
 
-    it.todo(
-      'should correctly update the state of the match `PlayingState` | `PlayerID1WinState` | `PlayerID2WinState` | `DrawState`'
-    )
+    it('should correctly update the state of the match `PlayingState` | `PlayerID1WinState` | `PlayerID2WinState` | `DrawState`', () => {
+      expect.hasAssertions()
+      // arrange
+      const match = Match.getInstance()
+      match.turn.setInitialState(match.player1.id)
+
+      /**
+       * assert:
+       * moves: [[1,2], [2,4], [3,8], [4,5], [5,3], [6,6], [7,1], [8,7], [9,0]]
+       * winning combo: [0, 1, 2]
+       * Board structure
+       * +---+---+---+
+       * | X | X | X |
+       * +---+---+---+
+       * | X | O | O |
+       * +---+---+---+
+       * | O | O | X |
+       * +---+---+---+
+       */
+      match.move(CellID.two)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.four)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.eight)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.five)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.three)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.six)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.one)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.seven)
+      expect(match.board.getBoardState()).toBe(BoardState.playing)
+
+      match.move(CellID.zero)
+
+      expect(match.board.getBoardState()).toBe(BoardState.playerID1Wins)
+    })
 
     describe('should correctly switch the turn after the move has been made', () => {
       it('bound: `PLAYING`', () => {
@@ -160,6 +204,7 @@ describe('Match', () => {
         // arrange
         const match = Match.getInstance()
         match.turn.setInitialState(match.player1.id)
+        // act
         match.move(CellID.zero) // 1. Player1 moves to cellZero
         match.move(CellID.one) // 2. Player2 moves to cellOne
         match.move(CellID.two) // 3. Player1 moves to cellTwo
@@ -168,18 +213,61 @@ describe('Match', () => {
         match.move(CellID.six) // 6. Player2 moves to cellSix
         match.move(CellID.five) // 7. Player1 moves to cellFive
         match.move(CellID.eight) // 8. Player2 moves to cellEight
-        // assert
+        /**
+         * assert:
+         *
+         * Board structure
+         * +---+---+---+
+         * | X | O | X |
+         * +---+---+---+
+         * | O | X | X |
+         * +---+---+---+
+         * | O | X | O |
+         * +---+---+---+
+         */
         expect(
           () => match.move(CellID.seven) // 9. Player1 moves to cellSeven
         ).not.toThrow()
-        // TODO: this should already throw
-        ;(match.board.getBoard().get(CellID.zero) as Cell<ICellID>)['state'] =
-          CellState.Empty
-
-        expect(() => match.move(CellID.zero)).toThrow()
+        expect(match.turn.number).toBe(9)
+        expect(match.board.getBoardState()).toBe(BoardState.draw)
       })
     })
 
-    it.todo('should correctly notify the registered observes of the new state')
+    it('should correctly notify the registered observes of the new state', () => {
+      expect.hasAssertions()
+      const match = Match.getInstance()
+      match.turn.setInitialState(match.player2.id)
+      const updateSpy = jest.fn()
+      const observer: IObserver<IMatchState> = { update: updateSpy }
+      match.registerObserver(observer)
+
+      /**
+       * assert:
+       * moves: [[1, 4], [2, 2], [3, 8], [4, 1], [5, 0]]
+       * winning combo: [0, 4, 8]
+       * Board structure
+       * +---+---+---+
+       * | O | X | X |
+       * +---+---+---+
+       * |   | O |   |
+       * +---+---+---+
+       * |   |   | O |
+       * +---+---+---+
+       */
+      match.move(CellID.four)
+      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+
+      match.move(CellID.two)
+      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+
+      match.move(CellID.three)
+      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+
+      match.move(CellID.one)
+      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+
+      match.move(CellID.five)
+      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playerID2Wins)
+    })
   })
 })

@@ -73,7 +73,7 @@ describe('Board class', () => {
 
     it('should return the state of given CellID', () => {
       expect.hasAssertions()
-      board['cells'].get(CellID.zero)?.setState(CellState.PlayerID1)
+      board['board'].get(CellID.zero)?.setState(CellState.PlayerID1)
       expect(board.getCellState(CellID.zero)).not.toBe(CellState.Empty)
       expect(board.getCellState(CellID.zero)).toBe(CellState.PlayerID1)
     })

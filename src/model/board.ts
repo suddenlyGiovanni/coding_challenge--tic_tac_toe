@@ -33,7 +33,7 @@ export enum BoardState {
 export class Board implements IBoard {
   private static instance: Board
 
-  private cells: ReadonlyMap<ICellID, ICell<ICellID>>
+  private board: ReadonlyMap<ICellID, ICell<ICellID>>
 
   // @ts-expect-error value is never read
   private readonly adjacencyLists: ReadonlyMap<CellID, ReadonlyArray<CellID>>
@@ -44,22 +44,37 @@ export class Board implements IBoard {
     readonly [CellID, CellID, CellID][]
   >
 
-  private constructor() {
-    this.cells = Board.makeCells()
+  private constructor(
+    board: ReadonlyMap<ICellID, ICell<ICellID>> = Board.makeBoard()
+  ) {
+    this.board = board
     this.adjacencyLists = Board.makeAdjacencyLists()
     this.winLookupTable = Board.makeWinLookupTable()
   }
 
   public setCellState(cellID: CellID, cellState: CellState): void {
-    this.cells.get(cellID)!.setState(cellState)
+    this.board.get(cellID)!.setState(cellState)
   }
 
   public getCellState(cellID: CellID): ICellState {
-    return this.cells.get(cellID)!.getState()
+    return this.board.get(cellID)!.getState()
   }
 
   public isCellEmpty(cellID: CellID): boolean {
-    return this.cells.get(cellID)!.isEmpty()
+    return this.board.get(cellID)!.isEmpty()
+  }
+
+  private checkWin(
+    board: ReadonlyMap<ICellID, ICell<ICellID>>,
+    playerID: IPlayerID
+  ): boolean {
+    throw new Error('METHOD_NOT_IMPLEMENTED')
+  }
+
+  private checkAvailableCell(
+    board: ReadonlyMap<ICellID, ICell<ICellID>>
+  ): boolean {
+    throw new Error('METHOD_NOT_IMPLEMENTED')
   }
 
   public getBoardState(): IBoardState {
@@ -68,16 +83,21 @@ export class Board implements IBoard {
   }
 
   public reset(): void {
-    this.cells.forEach((cell) => cell.clear())
+    this.board.forEach((cell) => cell.clear())
   }
 
   public getBoard(): ReadonlyMap<CellID, ICell<ICellID>> {
-    return this.cells
+    return this.board
   }
 
-  public static getInstance(): Board {
+  public static getInstance(
+    board?: ReadonlyMap<ICellID, ICell<ICellID>>
+  ): IBoard {
     if (!Board.instance) {
-      Board.instance = new Board()
+      Board.instance = new Board(board)
+    }
+    if (board) {
+      Board.instance.board = board
     }
     return Board.instance
   }
@@ -88,7 +108,7 @@ export class Board implements IBoard {
    * @returns {Map<CellID, CellState>}
    * @memberof Board
    */
-  private static makeCells(): ReadonlyMap<ICellID, ICell<ICellID>> {
+  public static makeBoard(): ReadonlyMap<ICellID, ICell<ICellID>> {
     return new Map<ICellID, ICell<ICellID>>([
       [CellID.zero, new Cell(CellID.zero)],
       [CellID.one, new Cell(CellID.one)],

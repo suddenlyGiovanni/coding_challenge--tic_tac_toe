@@ -1,17 +1,16 @@
-/* eslint-disable react/jsx-no-bind */
-import React from 'react'
+import React, { useCallback } from 'react'
 import type { HTMLAttributes, VFC, KeyboardEvent } from 'react'
 
 import styles from './Cell.module.css'
 
-import { CellID, CellState } from 'model'
-import type { ICellID, IPlayerID } from 'model/interfaces'
+import { CellState } from 'model'
+import type { ICellID, ICellState, IPlayerID } from 'model/interfaces'
 import { cx } from 'utils'
 
 interface CellProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onClick'> {
   readonly activePlayerID: IPlayerID
-  readonly cellID: CellID
-  readonly cellState: CellState
+  readonly cellID: ICellID
+  readonly cellState: ICellState
   readonly onClick: (cellID: ICellID) => void
 }
 
@@ -24,26 +23,28 @@ export const Cell: VFC<CellProps> = ({
 }) => {
   const HUMAN_READABLE_CELL_NUMBER = cellID + 1
 
-  const handleOnClick = (): void => {
+  const handleOnClick = useCallback((): void => {
     if (cellState === CellState.Empty) onClick(cellID)
-  }
+  }, [cellID, cellState, onClick])
 
-  const handleKeypress = (e: KeyboardEvent<HTMLDivElement>): void => {
-    if (cellState === CellState.Empty && e.key === 'Enter') {
-      onClick(cellID)
-    }
-  }
+  const handleKeypress = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>): void => {
+      if (cellState === CellState.Empty && e.key === 'Enter') {
+        onClick(cellID)
+      }
+    },
+    [cellID, cellState, onClick]
+  )
 
-  const handleArrowNavigation = (e: KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'ArrowLeft') {
-      console.log(e) // TODO: switch focus to the previous cell
-    }
-    if (e.key === 'ArrowRight') {
-      console.log(e) // TODO: switch focus to the next cell
-    }
-  }
+  const handleArrowNavigation = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>): void => {
+      if (e.key === 'ArrowLeft') void 0 // TODO: switch focus to the previous cell
+      if (e.key === 'ArrowRight') void 0 // TODO: switch focus to the next cell
+    },
+    []
+  )
 
-  const cellClassNames = (): string => {
+  const getClassName = (): string => {
     const cellStateStyle =
       cellState === CellState.PlayerID1
         ? styles.cross
@@ -62,8 +63,7 @@ export const Cell: VFC<CellProps> = ({
   return (
     <div
       aria-label={`Cell ${HUMAN_READABLE_CELL_NUMBER}`}
-      className={cellClassNames()}
-      data-cell
+      className={getClassName()}
       data-cell-id={cellID}
       data-cell-state={cellState}
       onClick={handleOnClick}

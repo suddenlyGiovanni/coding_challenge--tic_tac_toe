@@ -108,7 +108,7 @@ describe('Match', () => {
         match.notifyObservers()
 
         // assert
-        expect(updateMock).toHaveBeenCalledWith(BoardState.playing)
+        expect(updateMock).toHaveBeenCalledWith(match.getMatchState())
       })
     })
   })
@@ -255,19 +255,19 @@ describe('Match', () => {
        * +---+---+---+
        */
       match.move(CellID.four)
-      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+      expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState())
 
       match.move(CellID.two)
-      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+      expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState())
 
       match.move(CellID.three)
-      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+      expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState())
 
       match.move(CellID.one)
-      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+      expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState())
 
       match.move(CellID.five)
-      expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playerID2Wins)
+      expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState())
     })
   })
 })

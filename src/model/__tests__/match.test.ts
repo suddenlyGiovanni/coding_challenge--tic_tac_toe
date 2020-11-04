@@ -34,7 +34,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.zero)
     expect(match.board.getCellState(CellID.zero)).toBe(CellState.PlayerID1)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 2. Player2 moves to cellOne
     expect(match.turn.number).toBe(2)
@@ -43,7 +43,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.one)
     expect(match.board.getCellState(CellID.one)).toBe(CellState.PlayerID2)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 3. Player1 moves to cellTwo
     expect(match.turn.number).toBe(3)
@@ -52,7 +52,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.two)
     expect(match.board.getCellState(CellID.two)).toBe(CellState.PlayerID1)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 4. Player2 moves to cellThree
     expect(match.turn.number).toBe(4)
@@ -61,7 +61,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.three)
     expect(match.board.getCellState(CellID.three)).toBe(CellState.PlayerID2)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 5. Player1 moves to cellFour
     expect(match.turn.number).toBe(5)
@@ -70,7 +70,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.four)
     expect(match.board.getCellState(CellID.four)).toBe(CellState.PlayerID1)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 6. Player2 moves to cellSix
     expect(match.turn.number).toBe(6)
@@ -78,8 +78,8 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     expect(match.board.getCellState(CellID.six)).toBe(CellState.Empty)
     match.move(CellID.six)
     expect(match.board.getCellState(CellID.six)).toBe(CellState.PlayerID2)
-    // TODO: check the board state
-    // TODO: verify the observer has been notified of the new state of the board
+    expect(match.board.getBoardState()).toBe(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 7. Player1 moves to cellFive
     expect(match.turn.number).toBe(7)
@@ -88,7 +88,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.five)
     expect(match.board.getCellState(CellID.five)).toBe(CellState.PlayerID1)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 8. Player2 moves to cellEight
     expect(match.turn.number).toBe(8)
@@ -97,7 +97,7 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.eight)
     expect(match.board.getCellState(CellID.eight)).toBe(CellState.PlayerID2)
     expect(match.board.getBoardState()).toBe(BoardState.playing)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.playing)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
 
     // 9. Player1 moves to cellSeven
     expect(match.turn.number).toBe(9)
@@ -106,6 +106,6 @@ describe('should correctly handle a match of tic-tac-toe', () => {
     match.move(CellID.seven)
     expect(match.board.getCellState(CellID.seven)).toBe(CellState.PlayerID1)
     expect(match.board.getBoardState()).toBe(BoardState.draw)
-    expect(updateSpy).toHaveBeenLastCalledWith(BoardState.draw)
+    expect(updateSpy).toHaveBeenLastCalledWith(match.getMatchState()) // TODO: provide expected move IMatchState object
   })
 })

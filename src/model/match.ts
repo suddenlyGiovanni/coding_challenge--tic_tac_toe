@@ -1,6 +1,6 @@
 import { Board, BoardState } from 'model/board'
 import { CellID } from 'model/cell'
-import {
+import type {
   IBoard,
   IMatch,
   IMatchState,
@@ -17,9 +17,11 @@ export class Match implements IMatch, ISubject<IMatchState> {
   private static instance: Match
 
   private observers: IObserver<IMatchState>[]
+
   public readonly turn: ITurn
 
   public readonly board: IBoard
+
   public readonly player1: IPlayer1
 
   public readonly player2: IPlayer2
@@ -35,9 +37,18 @@ export class Match implements IMatch, ISubject<IMatchState> {
     this.board = Board.getInstance()
   }
 
+  public getMatchState(): IMatchState {
+    return {
+      state: this.board.getBoardState(),
+      turn: this.turn.get(),
+      turnNumber: this.turn.number,
+      board: this.board.getBoard(),
+    }
+  }
+
   public notifyObservers(): void {
     this.observers.forEach((observer) => {
-      observer.update(this.board.getBoardState())
+      observer.update(this.getMatchState())
     })
   }
 
@@ -51,8 +62,7 @@ export class Match implements IMatch, ISubject<IMatchState> {
   }
 
   public move(cellID: CellID): void {
-    const MAX_TURN_NUMBER = 9
-    if (MAX_TURN_NUMBER >= this.turn.number) {
+    if (Turn.MAX_TURN_NUMBER >= this.turn.number) {
       this.board.setCellState(cellID, this.turn.get()) // this could throw
       const state = this.board.getBoardState()
       if (state === BoardState.playing) {

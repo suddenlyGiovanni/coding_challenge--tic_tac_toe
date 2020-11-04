@@ -5,9 +5,17 @@ import type {
   ICellID,
   IBoard,
   IBoardState,
+  IPlayerID,
+  ITurnNumber,
+  ICell,
 } from 'model/interfaces'
 
-export type IMatchState = IBoardState // TODO: convert it to an interface and add all the necessary fields
+export interface IMatchState {
+  board: ReadonlyMap<ICellID, ICell<ICellID>>
+  turn: IPlayerID
+  turnNumber: ITurnNumber
+  state: IBoardState
+}
 
 /**
  * Creates an instance of a Match, two players and keeps track of whose turn it is.

@@ -15,7 +15,9 @@ export class Turn implements ITurn {
 
   private turnNumber: ITurnNumber
 
-  public constructor(player1: IPlayer1, player2: IPlayer2) {
+  public static MAX_TURN_NUMBER = 9
+
+  constructor(player1: IPlayer1, player2: IPlayer2) {
     this.player1 = player1
     this.player2 = player2
     this.turn = this.getRandomPlayer()

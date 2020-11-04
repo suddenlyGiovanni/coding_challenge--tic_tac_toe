@@ -1,14 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import type { VFC } from 'react'
 
 import styles from './Overlay.module.css'
 
 import { BoardState } from 'model/board'
 import type { IBoardState } from 'model/interfaces'
-import { cx } from 'utils'
-import { MatchCtx } from 'view/App'
 
-const message = (state: IBoardState): string => {
+const getMessage = (
+  state: IBoardState
+): 'Draw' | "X's Wins!" | "O's Wins!" | 'Playing' => {
   switch (state) {
     case BoardState.draw:
       return 'Draw'
@@ -20,24 +20,21 @@ const message = (state: IBoardState): string => {
       return "O's Wins!"
 
     default:
-      return ''
+      return 'Playing'
   }
 }
-export const Overlay: VFC = () => {
-  const {
-    reset,
-    board: { getBoardState },
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  } = useContext(MatchCtx)!
-  return (
-    <div
-      className={cx(
-        styles.overlay,
-        getBoardState() !== BoardState.playing && styles.show
-      )}
-      id="winningMessage"
-    >
-      <div data-winning-message-text>{message(getBoardState())}</div>
+
+interface Props {
+  readonly matchState: IBoardState
+  readonly reset: () => void
+}
+
+export const Overlay: VFC<Props> = ({ reset, matchState }) => {
+  const message = getMessage(matchState)
+
+  return matchState === BoardState.playing ? null : (
+    <div className={styles.overlay} id="winningMessage">
+      <div>{message}</div>
       <button id="restartButton" onClick={reset} type="button">
         {'Restart'}
       </button>
